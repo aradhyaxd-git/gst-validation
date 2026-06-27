@@ -783,3 +783,34 @@ Validates a SAC code by format. Accepts exactly 6 digit strings.
 isValidSAC("996311"); // true
 isValidSAC("9963");   // false — SAC must be exactly 6 digits
 \`\`\`
+
+
+
+## Optional Adapters
+
+### Zod (`gstin-toolkit/zod`)
+
+Requires `zod >= 3.0.0` as a peer dependency.
+
+\`\`\`bash
+npm install gstin-toolkit zod
+\`\`\`
+
+\`\`\`typescript
+import { z } from 'zod';
+import { gstinSchema, optionalGstinSchema } from 'gstin-toolkit/zod';
+
+// In a Zod schema
+const VendorSchema = z.object({
+  name:  z.string(),
+  gstin: gstinSchema,
+});
+
+VendorSchema.parse({ name: 'Acme', gstin: '27AABCU9603R1ZX' }); // passes
+VendorSchema.parse({ name: 'Acme', gstin: 'BAD' });              // throws ZodError: "Invalid GSTIN: INVALID_LENGTH"
+
+// Optional GSTIN field (empty string allowed)
+const FormSchema = z.object({
+  gstin: optionalGstinSchema,
+});
+\`\`\`
