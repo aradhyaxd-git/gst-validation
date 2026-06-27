@@ -1,5 +1,7 @@
 import { defineConfig } from "vitest/config";
 
+
+
 export default defineConfig({
   test: {
     globals: true,
@@ -9,6 +11,11 @@ export default defineConfig({
       reporter: ["text", "html"],
       include: ["src/**/*.ts"],
       exclude: ["src/types.ts", "src/index.ts"],
+    },
+  },
+  resolve: {
+    alias: {
+      "gstin-toolkit": new URL("./src/index.ts", import.meta.url).pathname,
     },
   },
 });
