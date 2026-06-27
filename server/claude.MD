@@ -814,3 +814,46 @@ const FormSchema = z.object({
   gstin: optionalGstinSchema,
 });
 \`\`\`
+
+
+
+### React Hook (`gstin-toolkit/react`)
+
+Requires `react >= 16.8.0` as a peer dependency.
+
+\`\`\`bash
+npm install gstin-toolkit react
+\`\`\`
+
+\`\`\`tsx
+import { useState } from 'react';
+import { useGSTINValidation } from 'gstin-toolkit/react';
+
+function GSTINInput() {
+  const [value, setValue] = useState('');
+  const { valid, errors, parsed } = useGSTINValidation(value);
+
+  return (
+    <div>
+      <input
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Enter GSTIN"
+      />
+      {!valid && errors.length > 0 && (
+        <p className="error">{errors[0]}</p>
+      )}
+      {parsed && (
+        <p>State: {parsed.stateName} · Type: {parsed.panHolderType}</p>
+      )}
+    </div>
+  );
+}
+\`\`\`
+
+The hook returns:
+| Field | Type | Description |
+|-------|------|-------------|
+| `valid` | `boolean` | `true` if GSTIN passes all checks |
+| `errors` | `GSTINErrorCode[]` | Error codes, empty when valid |
+| `parsed` | `ParsedGSTIN \| null` | Decoded components, or `null` if invalid |
